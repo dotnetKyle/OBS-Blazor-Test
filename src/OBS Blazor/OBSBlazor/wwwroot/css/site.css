@@ -1,0 +1,35 @@
+html, body, app, main {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color:transparent;
+    margin:0;
+    padding:0;
+    color:white;
+}
+
+.obs-component {
+    display:block;
+    background-color: rebeccapurple;
+    margin:0;
+    text-align:center;
+}
+
+.obs-bg-transparent {
+    background-color:transparent;
+}
+
+.obs-align-left {
+    text-align:left;
+}
+.obs-align-right {
+    text-align:right;
+}
+
+.obs-padding-l-2 {
+    padding-left: 2px;
+}
+.obs-padding-r-2 {
+    padding-right: 2px;
+}
+.obs-padding-2 {
+    padding: 2px;
+}

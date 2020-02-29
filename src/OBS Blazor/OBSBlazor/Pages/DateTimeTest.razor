@@ -1,0 +1,39 @@
+﻿@using System.Timers
+
+@page "/date-time-test"
+
+<div class="obs-component obs-padding-2">
+    <h1 style="margin:0;padding-bottom:2px;">@dateTimeString</h1>
+    <small>@timezone</small>
+</div>
+
+@code {
+    private string dateTimeString { get; set; } = "Loading...";
+    private string timezone { get; set; }
+
+    private Timer ticker;
+    const string dateTimeFormat = "d MMM yyyy h:mm tt";
+
+    void GetTime()
+    {
+        dateTimeString = DateTime.Now.ToString(dateTimeFormat);
+        timezone = TimeZoneInfo.Local.Id;
+    }
+
+    protected override void OnInitialized()
+    {
+        GetTime();
+
+        ticker = new Timer(1000);
+        ticker.Elapsed += Tick;
+        ticker.Start();
+
+        base.OnInitialized();
+    }
+
+    async void Tick(object target, ElapsedEventArgs args)
+    {
+        GetTime();
+        await InvokeAsync(StateHasChanged);
+    }
+}
