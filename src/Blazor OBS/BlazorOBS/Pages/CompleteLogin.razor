@@ -1,0 +1,46 @@
+﻿@using Microsoft.Extensions.Configuration
+@using System.Net
+
+@page "/complete-login"
+
+@inject NavigationManager navManager
+@inject IConfiguration config
+@inject IJSRuntime js
+
+<h1>Completing Login to Twitch...</h1>
+
+<div class="alert alert-info">
+    Storing your information...
+</div>
+
+@code { 
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            var hash = await js.InvokeAsync<string>("app.getUrlHash");
+
+            if (hash.StartsWith('#'))
+                hash = hash.Substring(1);
+
+            var parameters = hash.Split('&');
+
+            string accessToken = parameters.FirstOrDefault(e => e.StartsWith("access_token"));
+            string idToken = parameters.FirstOrDefault(e => e.StartsWith("id_token"));
+            string scope = parameters.FirstOrDefault(e => e.StartsWith("scope"));
+            string tokenType = parameters.FirstOrDefault(e => e.StartsWith("token_type"));
+
+            accessToken = accessToken != null ? accessToken.Split('=')[1] : null;
+            idToken = idToken != null ? idToken.Split('=')[1] : null;
+            scope = scope != null ? scope.Split('=')[1] : null;
+            tokenType = tokenType != null ? tokenType.Split('=')[1] : null;
+
+            BlazorOBSUserSettings.Save(accessToken, idToken, scope, tokenType);
+        }
+
+        navManager.NavigateTo("/");
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}

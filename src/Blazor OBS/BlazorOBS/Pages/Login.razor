@@ -1,0 +1,50 @@
+﻿@using Microsoft.Extensions.Configuration
+@using System.Net
+
+@page "/login"
+
+@inject NavigationManager navManager
+@inject IConfiguration config
+
+<h1>Login to Twitch</h1>
+
+<button @onclick="onclick">Click Here to log into Twitch</button>
+
+<div class="alert alert-info">
+    Please note that you need to sign into your account, not your bot account.
+</div>
+
+@code {
+    void onclick()
+    {
+        //TODO: check if we already have a token stored, if so, validate that token instead
+
+        var settings = BlazorOBSTwitchSettings.Get();
+        var redirectUri = config.GetValue<string>("loginRedirectUri", "https://localhost:44360/complete-login");
+
+        var scopes = new string[]
+        {
+            // New Twitch API scopes
+            "openid", // required
+            "channel_feed_read",
+            "chat:read",
+            //"bits:read", // 
+            //"channel:read:subscriptions", // 
+            //"user:read:broadcast", // 
+
+            //// Chat and PubSub
+            //"channel:moderate", // Perform moderation actions in a channel. The user requesting the scope must be a moderator in the channel.
+            // "chat:read", // View live stream chat and rooms messages.
+            //"chat:edit", // Send live stream chat and rooms messages.
+            //"whispers:read", // View your whisper messages.
+            //"whispers:edit", // Send whisper messages.
+        };
+
+        var twitchUrl = $"https://id.twitch.tv/oauth2/authorize?client_id={settings.ClientId}"
+            + $"&redirect_uri={redirectUri}" // the next step after the user authorizes the app
+            + "&response_type=token%20id_token" // get a token and and id token
+            + $"&scope={WebUtility.UrlEncode(string.Join(' ', scopes))}";
+
+        navManager.NavigateTo(twitchUrl);
+    }
+}
