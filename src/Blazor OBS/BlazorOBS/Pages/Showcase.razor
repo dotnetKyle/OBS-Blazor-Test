@@ -1,0 +1,33 @@
+﻿@using BlazorOBS.Extensions
+@using BlazorOBS.Shared
+
+@inject UserState userState
+
+@page "/showcase"
+
+<h3>Extension Showcase</h3>
+
+<div style="margin-left:10px;margin-right:10px;">
+    <p>
+        Chat highlighter shows a chat message when you click the 'Highlight Message'
+        button on the line of chat that you want to highlight.
+        Click <button @onclick="showChatHightlight">Here</button> to show an example.
+              
+        <div class="alert alert-danger">Warning: this will show during your stream if you are live and have the component loaded.</div>
+    </p>
+
+    <BlazorObsExtensionShowcase>
+        <ChatHighlighter />
+    </BlazorObsExtensionShowcase>
+</div>
+
+@code {
+    void showChatHightlight()
+    {
+        userState.ShowHighlightedMessage(null, new HighlightedMessage
+        {
+            Username = "dotnetKyle",
+            Message = ""
+        });
+    }
+}

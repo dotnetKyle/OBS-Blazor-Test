@@ -117,23 +117,17 @@ namespace BlazorOBS.Services
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
             var userId = e.ChatMessage.UserId;
-            var userName = e.ChatMessage.Username;
             var type = e.ChatMessage.UserType;
-            var msg = e.ChatMessage.Message;
 
-            var chatEvent = new TwitchChatEvent(TwitchChatEventType.MessageRecieved, msg);
-            chatEvent.Username = userName;
+            var chatEvent = new TwitchChatEvent(TwitchChatEventType.MessageRecieved, e.ChatMessage.Message);
+            chatEvent.Username = e.ChatMessage.Username;
 
             OnChatEvent?.Invoke(chatEvent);
         }
 
         private void Client_OnLog(object sender, OnLogArgs e)
         {
-            var botUsername = e.BotUsername;
-            var data = e.Data;
-            var dtg = e.DateTime;
-
-            OnChatEvent?.Invoke(new TwitchChatEvent(TwitchChatEventType.Log, e.Data));
+            System.Diagnostics.Debug.WriteLine($"Username:{e.BotUsername}: {e.Data}");
         }
 
         private void Client_OnHostingStopped(object sender, OnHostingStoppedArgs e)

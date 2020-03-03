@@ -1,0 +1,65 @@
+﻿@using BlazorOBS.Components
+@using System.Timers
+
+@page "/chat-highlighter"
+
+@inject UserState userState
+
+<BlazorObsExtension>
+    @if (showHighlight)
+    {
+        <ChatMessage Username="@username" Message="@message" FadeOut="@fadeOut" />
+    }
+</BlazorObsExtension>
+
+@code {
+    private Timer fadeOutTimer;
+    private Timer removeMessageTimer;
+
+    private string username { get; set; }
+    private string message { get; set; }
+    private bool showHighlight { get; set; }
+    private bool fadeOut { get; set; }
+
+    private async void removeHighlight(object target, ElapsedEventArgs args)
+    {
+        showHighlight = false;
+
+        removeMessageTimer.Stop();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void fadeOutHighlight(object target, ElapsedEventArgs args)
+    {
+        fadeOut = true;
+
+        fadeOutTimer.Stop();
+
+        removeMessageTimer = new Timer(3000);
+        removeMessageTimer.Elapsed += removeHighlight;
+        removeMessageTimer.Start();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected override void OnInitialized()
+    {
+        userState.OnHighlightMessage += HighlightMessage;
+
+        base.OnInitialized();
+    }
+
+    async void HighlightMessage(object target, HighlightedMessage highlightedMessage)
+    {
+        showHighlight = true;
+        username = highlightedMessage.Username;
+        message = highlightedMessage.Message;
+
+        await InvokeAsync(StateHasChanged);
+
+        fadeOutTimer = new Timer(30 * 1000);
+        fadeOutTimer.Elapsed += fadeOutHighlight;
+        fadeOutTimer.Start();
+    }
+}

@@ -2,46 +2,63 @@
 @using System.Timers
 @using Humanizer
 
+@inject UserState userState
+
 @page "/chat"
 
 <style>
     .chat-window {
-        display:grid;
-        grid-template-columns: min-content min-content auto;
+        display: grid;
+                            /*  Date-Time   Username   Msg     Actions*/
+        grid-template-columns: min-content min-content auto min-content;
     }
+
     .chat-dtg {
-        padding-left:4px;
-        padding-right:4px;
+        padding-left: 4px;
+        padding-right: 4px;
         grid-column: 1 / 2;
     }
+
     .chat-user {
         grid-column: 2 / 3;
     }
+
     .chat-message {
         grid-column: 3 / 4;
-        border-bottom:1px solid #c3c3c3;
+        border-bottom: 1px solid #c3c3c3;
     }
+
+    .chat-actions {
+        grid-column: 4 / 5;
+    }
+
     .msg {
-        padding-left:3px; 
-        padding-right:3px;
+        padding-left: 3px;
+        padding-right: 3px;
         border-radius: 2px;
     }
-    .msg.log {
-        font-size:x-small;
-    }
-    .msg.messagerecieved {
-        background-color:#99c0e1;
-        font-weight:bold;
-    }
-    .msg.userjoined {
-        background-color:#99e199;
-    }
-    .msg.userleft {
-        color:gray;
-    }
+
+        .msg.log {
+            font-size: x-small;
+        }
+
+        .msg.messagerecieved {
+            background-color: #99c0e1;
+            font-weight: bold;
+        }
+
+        .msg.userjoined {
+            background-color: #99e199;
+        }
+
+        .msg.userleft {
+            color: gray;
+        }
+
     .icon.log {
         color: darkgray;
     }
+
     .icon.raidstarted {
         color: blue;
     }
@@ -51,20 +68,24 @@
     }
 </style>
 
-
 <div class="m-2">
     <h1>Chat</h1>
 
     <div class="chat-window">
         @foreach (var chat in currentChatEvents)
         {
+            @* Date Time Column *@
             <div class="chat-dtg text-nowrap">@chat.DTGUtc.Humanize()</div>
+
+            @* Username Column *@
             <div class="chat-user text-nowrap">
-                @if(chat.Username != null)
+                @if (chat.Username != null)
                 {
                     <span class="badge">@chat.Username</span>
                 }
             </div>
+
+            @* Message Column *@
             <div class="chat-message">
                 <span class="icon @chat.Type.ToString().ToLower()">
                     @switch (chat.Type)
@@ -102,6 +123,16 @@
                 </span>
                 <span class="msg @chat.Type.ToString().ToLower()">@chat.Message</span>
             </div>
+
+            @* Actions Column *@
+            <div class="chat-actions">
+                @if(chat.Type == TwitchChatEventType.MessageRecieved)
+                {
+                    <button type="button" class="btn btn-sm btn-success" title="Highlight Chat Message" @onclick="() => highlightChatMessage(chat)">
+                        <i class="fas fa-share-square"></i>
+                    </button>
+                }
+            </div>
         }
     </div>
 </div>
@@ -132,6 +163,15 @@
         base.OnInitialized();
     }
 
+    void highlightChatMessage(TwitchChatEvent chatEvent)
+    {
+        userState.ShowHighlightedMessage(chatEvent, new HighlightedMessage
+        {
+            Username = chatEvent.Username,
+            Message = chatEvent.Message
+        });
+    }
+
     async void chatUpdateTick(object target, ElapsedEventArgs args)
     {
         dateRefresh += timerTicksInSeconds;
@@ -149,7 +189,7 @@
         else
         {
             // refresh the humanizer dates at least every 15 seconds
-            if(dateRefresh > 15)
+            if (dateRefresh > 15)
             {
                 dateRefresh = 0;
                 await InvokeAsync(StateHasChanged);

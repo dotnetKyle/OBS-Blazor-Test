@@ -2,16 +2,33 @@
 
 @inherits LayoutComponentBase
 
+@if (showNav)
+{
+    <NavMenu />
+}
 
-
-
-<NavMenu />
-
-<main>
-    @Body
-</main>
-
-
+<CascadingValue Name="IsExtension" Value="IsExtension">
+    <main>
+        @Body
+    </main>
+</CascadingValue>
 
 @code {
+    private bool showNav = true;
+
+    private Action IsExtension { get; set; }
+
+    protected override void OnInitialized()
+    {
+        IsExtension = isExtension;
+
+        base.OnInitialized();
+    }
+
+    async void isExtension()
+    {
+        showNav = false;
+
+        await InvokeAsync(StateHasChanged);
+    }    
 }
