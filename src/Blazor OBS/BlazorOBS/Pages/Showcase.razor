@@ -8,10 +8,16 @@
 <h3>Extension Showcase</h3>
 
 <div style="margin-left:10px;margin-right:10px;">
+    <div class="extension-metadata">
+        <div class="extension-url">
+            <label>Component URL:</label>
+            <code>https://localhost:44360/chat-highlighter</code>
+        </div>
+    </div>
     <p>
         Chat highlighter shows a chat message when you click the 'Highlight Message'
         button on the line of chat that you want to highlight.
-        Click <button @onclick="showChatHightlight">Here</button> to show an example.
+        Click <button class="btn btn-danger" @onclick="showChatHightlight">Here</button> to show an example.
               
         <div class="alert alert-danger">Warning: this will show during your stream if you are live and have the component loaded.</div>
     </p>
@@ -27,7 +33,9 @@
         userState.ShowHighlightedMessage(null, new HighlightedMessage
         {
             Username = "dotnetKyle",
-            Message = ""
+            Message = "Lorem ipsum dolor sit amet, consectetur adipiscing "
+                + "elit, sed do eiusmod tempor incididunt ut labore et "
+                + "dolore magna aliqua."
         });
     }
 }

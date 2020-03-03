@@ -13,16 +13,32 @@ html, body, main, app {
 }
 
 .chat-highlighter {
-    margin:15px;
-    padding:3px;
-    box-shadow:10px 10px 10px rgba(0,0,0,0.5);
-    background-color:orange;
-    border-radius:5px;
+    text-align: center;
 }
-.chat-highlighter-message {
-    color:black;
+.chat-highlighter-wrap {
+    max-width:50%;
+    display:inline-block;
+    text-align:center;
 }
-.chat-highlighter-username {
-    font-weight:bold;
-    color:rgba(0,0,0,0.75);
+
+.highlighted-chat-message {
+    /* Margin and box shadow work together here, 
+        margin must be at LEAST twice the box shadow 
+        so that the shadow is not cut off in the direction 
+        that the shadow goes
+    */
+    margin: 30px;
+    margin-top: 3px;
+    box-shadow: 10px 10px 10px rgba(0,0,0,0.5);
+    padding: 3px;
+    display: inline-block;
+    background-color: orange;
+    border-radius: 5px;
+}
+.highlighted-chat-message-msg {
+    color: black;
+}
+.highlighted-chat-message-username {
+    font-weight: bold;
+    color: rgba(0,0,0,0.75);
 }

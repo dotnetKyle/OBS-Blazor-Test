@@ -5,38 +5,40 @@
 
 @inject UserState userState
 
-<BlazorObsExtension>
-    @if (showHighlight)
-    {
-        <ChatMessage Username="@username" Message="@message" FadeOut="@fadeOut" />
-    }
-</BlazorObsExtension>
+<div class="chat-highlighter">
+    <div class="chat-highlighter-wrap">
+        <BlazorObsExtension>
+            @if (showHighlight)
+            {
+                <ChatMessage Username="@username" Message="@message" Exit="@animateExit" />
+            }
+        </BlazorObsExtension>
+    </div>
+</div>
 
 @code {
-    private Timer fadeOutTimer;
+    private Timer exitTimer;
     private Timer removeMessageTimer;
 
     private string username { get; set; }
     private string message { get; set; }
     private bool showHighlight { get; set; }
-    private bool fadeOut { get; set; }
+    private bool animateExit { get; set; }
 
     private async void removeHighlight(object target, ElapsedEventArgs args)
     {
         showHighlight = false;
-
-        removeMessageTimer.Stop();
+        animateExit = false;
 
         await InvokeAsync(StateHasChanged);
     }
 
-    private async void fadeOutHighlight(object target, ElapsedEventArgs args)
+    private async void animateExitOfHighlight(object target, ElapsedEventArgs args)
     {
-        fadeOut = true;
-
-        fadeOutTimer.Stop();
+        animateExit = true;
 
         removeMessageTimer = new Timer(3000);
+        removeMessageTimer.AutoReset = false; // do not repeat automatically
         removeMessageTimer.Elapsed += removeHighlight;
         removeMessageTimer.Start();
 
@@ -58,8 +60,9 @@
 
         await InvokeAsync(StateHasChanged);
 
-        fadeOutTimer = new Timer(30 * 1000);
-        fadeOutTimer.Elapsed += fadeOutHighlight;
-        fadeOutTimer.Start();
+        exitTimer = new Timer(30 * 1000);
+        exitTimer.AutoReset = false; // do not repeat automatically
+        exitTimer.Elapsed += animateExitOfHighlight;
+        exitTimer.Start();
     }
 }

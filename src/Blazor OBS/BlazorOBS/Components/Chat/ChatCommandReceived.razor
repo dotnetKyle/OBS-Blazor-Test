@@ -1,0 +1,37 @@
+﻿@using Humanizer
+    
+@* Date Time Column *@
+<div class="chat-dtg text-nowrap">@DateTimeUTC.Humanize()</div>
+
+<div class="chat-icon">
+    <i class="fas fa-exclamation-circle"></i>
+</div>
+
+@* Username Column *@
+<div class="chat-user text-nowrap">
+    @if(string.IsNullOrWhiteSpace(Username) == false)
+    {
+        <span class="badge badge-primary">
+            @Username
+        </span>
+    }
+</div>
+
+@* Message Column *@
+<div class="chat-message">
+    <span class="chat-command">@Command</span>
+</div>
+
+@* Actions Column *@
+<div class="chat-actions"></div>
+
+@code {
+    [Parameter]
+    public DateTime DateTimeUTC { get; set; }
+
+    [Parameter]
+    public string Command { get; set; }
+
+    [Parameter]
+    public string Username { get; set; }
+}

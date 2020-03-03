@@ -2,7 +2,6 @@
 {
     public enum TwitchChatEventType
     {
-        Log,
         LogError,
         UserJoined,
         UserLeft,

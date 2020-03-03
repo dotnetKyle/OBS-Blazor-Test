@@ -1,0 +1,27 @@
+﻿@using Humanizer
+    
+@* Date Time Column *@
+<div class="chat-dtg text-nowrap">@DateTimeUTC.Humanize()</div>
+
+@* Username Column *@
+<div class="chat-icon text-nowrap">
+    <i class="fas fa-h-square"></i>
+</div>
+
+@* Message Column *@
+<div class="chat-full-line">
+    <span class="msg">You are now hosting</span>
+    <span class="badge badge-secondary">@Channel</span>
+    <span>with @ViewerCount viewers</span>
+</div>
+
+@code {
+    [Parameter]
+    public DateTime DateTimeUTC { get; set; }
+
+    [Parameter]
+    public int ViewerCount { get; set; }
+
+    [Parameter]
+    public string Channel { get; set; }
+}

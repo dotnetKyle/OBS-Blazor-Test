@@ -11,3 +11,37 @@ main {
 #blazor-error-ui {
     display:none;
 }
+
+
+/* Extensions need to show when they are disconnected BUT, 
+    they should not use the default one because this is bad 
+    experience for users */
+#components-reconnect-modal {
+    position:absolute;
+    right: 5px;
+    top: 5px;
+    background-color:transparent;
+    font-size:2em;
+}
+    #components-reconnect-modal > div {
+        display: inline-block;
+        visibility:hidden;
+    }
+    #components-reconnect-modal.components-reconnect-show > div.show {
+        display: inline-block;
+        visibility:visible;
+        color: rgba(0,0,0,0.5);
+        /*color:rgba(255, 137, 137, 0.8);*/
+    }
+    #components-reconnect-modal.components-reconnect-failed > div.failed {
+        display: inline-block;
+        visibility: visible;
+        color: mediumvioletred;
+        /*color: rgba(255, 137, 137, 0.8);*/
+    }
+    #components-reconnect-modal.components-reconnect-refused > div.refused {
+        display: inline-block;
+        visibility: visible;
+        color: red;
+        /*color: rgb(255, 137, 137);*/
+    }

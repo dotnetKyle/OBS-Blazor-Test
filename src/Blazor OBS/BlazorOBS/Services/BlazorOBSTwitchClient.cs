@@ -132,13 +132,12 @@ namespace BlazorOBS.Services
 
         private void Client_OnHostingStopped(object sender, OnHostingStoppedArgs e)
         {
-            OnChatEvent?.Invoke(new TwitchChatEvent(TwitchChatEventType.HostingStopped, 
-                $"{e.HostingStopped.HostingChannel} has stopped hosting the channel."));
+            OnChatEvent?.Invoke(new TwitchChatEvent(TwitchChatEventType.HostingStopped, "Hosting Stopped."));
         }
         private void Client_OnHostingStarted(object sender, OnHostingStartedArgs e)
         {
             OnChatEvent?.Invoke(new TwitchChatEvent(TwitchChatEventType.HostingStarted, 
-                $"{e.HostingStarted.HostingChannel} has started hosting the channel with {e.HostingStarted.Viewers} viewers."));
+                $"{e.HostingStarted.HostingChannel} is hosting {e.HostingStarted.TargetChannel} with {e.HostingStarted.Viewers} viewers."));
         }
 
         private void Client_OnExistingUsersDetected(object sender, OnExistingUsersDetectedArgs e)
@@ -167,6 +166,10 @@ namespace BlazorOBS.Services
 
         private void Client_OnBeingHosted(object sender, OnBeingHostedArgs e)
         {
+            var hostedBy = e.BeingHostedNotification.HostedByChannel;
+            var isAutoHost = e.BeingHostedNotification.IsAutoHosted;
+            var viewers = e.BeingHostedNotification.Viewers;
+
             throw new NotImplementedException();
         }
 

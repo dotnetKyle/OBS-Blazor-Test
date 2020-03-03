@@ -1,6 +1,6 @@
-﻿<div class="chat-highlighter animated fadeInLeft @(FadeOut ? "fadeOutRight" : "")">
-    <span class="chat-highlighter-username">@Username:</span>
-    <span class="chat-highlighter-message">@Message</span>
+﻿<div class="highlighted-chat-message animated fadeInLeft @(Exit  ? "fadeOutRight" : "")">
+    <span class="highlighted-chat-message-username">@Username:</span>
+    <span class="highlighted-chat-message-msg">@Message</span>
 </div>
 
 @code {
@@ -14,7 +14,7 @@
     public string Message { get; set; }
 
     [Parameter]
-    public bool FadeOut { get; set; }
+    public bool Exit { get; set; }
 
     protected override void OnInitialized()
     {

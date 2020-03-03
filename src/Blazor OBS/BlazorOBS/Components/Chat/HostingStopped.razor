@@ -1,0 +1,19 @@
+﻿@using Humanizer
+
+@* Date Time Column *@
+<div class="chat-dtg text-nowrap">@DateTimeUTC.Humanize()</div>
+
+@* Username Column *@
+<div class="chat-icon text-nowrap">
+    <i class="fas fa-h-square"></i>
+</div>
+
+@* Message Column *@
+<div class="chat-full-line">
+    <span>You are no longer hosting.</span>
+</div>
+
+@code {
+    [Parameter]
+    public DateTime DateTimeUTC { get; set; }
+}

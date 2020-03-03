@@ -1,6 +1,7 @@
 ﻿@using BlazorOBS.Services
 @using System.Timers
 @using Humanizer
+@using BlazorOBS.Components.Chat
 
 @inject UserState userState
 
@@ -9,8 +10,8 @@
 <style>
     .chat-window {
         display: grid;
-                            /*  Date-Time   Username   Msg     Actions*/
-        grid-template-columns: min-content min-content auto min-content;
+                            /*  Date-Time   Username     icon       Msg     Actions*/
+        grid-template-columns: min-content min-content min-content auto min-content;
     }
 
     .chat-dtg {
@@ -19,17 +20,25 @@
         grid-column: 1 / 2;
     }
 
-    .chat-user {
+    .chat-icon {
         grid-column: 2 / 3;
     }
 
-    .chat-message {
+    .chat-user {
         grid-column: 3 / 4;
+    }
+
+    .chat-message {
+        grid-column: 4 / 5;
         border-bottom: 1px solid #c3c3c3;
     }
 
     .chat-actions {
-        grid-column: 4 / 5;
+        grid-column: 5 / 6;
+    }
+
+    .chat-full-line {
+        grid-column: 3 / 6;
     }
 
     .msg {
@@ -74,65 +83,36 @@
     <div class="chat-window">
         @foreach (var chat in currentChatEvents)
         {
-            @* Date Time Column *@
-            <div class="chat-dtg text-nowrap">@chat.DTGUtc.Humanize()</div>
-
-            @* Username Column *@
-            <div class="chat-user text-nowrap">
-                @if (chat.Username != null)
-                {
-                    <span class="badge">@chat.Username</span>
-                }
-            </div>
-
-            @* Message Column *@
-            <div class="chat-message">
-                <span class="icon @chat.Type.ToString().ToLower()">
-                    @switch (chat.Type)
-                    {
-                        case TwitchChatEventType.Log:
-                            <i class="fas fa-clipboard-list"></i>
-                            break;
-                        case TwitchChatEventType.LogError:
-                            <i class="fas fa-exclamation-triangle"></i>
-                            break;
-                        case TwitchChatEventType.UserJoined:
-                            <i class="fas fa-sign-in-alt"></i>
-                            break;
-                        case TwitchChatEventType.UserLeft:
-                            <i class="fas fa-angle-left"></i>
-                            break;
-                        case TwitchChatEventType.HostingStarted:
-                            <i class="fas fa-h-square"></i>
-                            break;
-                        case TwitchChatEventType.HostingStopped:
-                            <i class="fas fa-h-square"></i>
-                            break;
-                        case TwitchChatEventType.RaidStarted:
-                            <i class="fas fa-birthday-cake"></i>
-                            break;
-                        case TwitchChatEventType.MessageRecieved:
-                            <i class="fas fa-comment-dots"></i>
-                            break;
-                        case TwitchChatEventType.CommandRecieved:
-                            <i class="fas fa-exclamation-circle"></i>
-                            break;
-                        default:
-                            break;
-                    }
-                </span>
-                <span class="msg @chat.Type.ToString().ToLower()">@chat.Message</span>
-            </div>
-
-            @* Actions Column *@
-            <div class="chat-actions">
-                @if(chat.Type == TwitchChatEventType.MessageRecieved)
-                {
-                    <button type="button" class="btn btn-sm btn-success" title="Highlight Chat Message" @onclick="() => highlightChatMessage(chat)">
-                        <i class="fas fa-share-square"></i>
-                    </button>
-                }
-            </div>
+            @switch (chat.Type)
+            {
+                case TwitchChatEventType.LogError:
+                    <ErrorLog DateTimeUTC="@chat.DTGUtc" Message="@chat.Message" />
+                    break;
+                case TwitchChatEventType.UserJoined:
+                    <UserJoined DateTimeUTC="@chat.DTGUtc" Username="@chat.Username" />
+                    break;
+                case TwitchChatEventType.UserLeft:
+                    <UserLeft DateTimeUTC="@chat.DTGUtc" Username="@chat.Username" />
+                    break;
+                case TwitchChatEventType.HostingStarted:
+                    <HostingStarted DateTimeUTC="@chat.DTGUtc" Channel="@chat.Channel" ViewerCount="@chat.Viewers" />
+                    break;
+                case TwitchChatEventType.HostingStopped:
+                    <HostingStopped DateTimeUTC="@chat.DTGUtc" />
+                    break;
+                case TwitchChatEventType.RaidStarted:
+                    <RaidStarted DateTimeUTC="@chat.DTGUtc" Channel="@chat.Channel" />
+                    break;
+                case TwitchChatEventType.MessageRecieved:
+                    <ChatMessage DateTimeUTC="@chat.DTGUtc"  Message="@chat.Message" />
+                    break;
+                case TwitchChatEventType.CommandRecieved:
+                    <ChatCommandReceived DateTimeUTC="@chat.DTGUtc" Command="@chat.Command" Username="@chat.Username" />                    
+                    break;
+                default:
+                    <ChatMessage DateTimeUTC="@chat.DTGUtc" Message="@chat.Message" />
+                    break;
+            }
         }
     </div>
 </div>

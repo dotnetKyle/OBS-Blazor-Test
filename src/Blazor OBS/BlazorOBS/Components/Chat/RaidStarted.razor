@@ -1,0 +1,24 @@
+﻿@using Humanizer
+
+@* Date Time Column *@
+<div class="chat-dtg text-nowrap">@DateTimeUTC.Humanize()</div>
+
+<div class="chat-icon">
+    <i class="fas fa-birthday-cake"></i>
+</div>
+
+@* Message Column *@
+<div class="chat-full-line">
+    <span>Raid started for @Channel</span>
+</div>
+
+@* Actions Column *@
+<div class="chat-actions"></div>
+
+@code {
+    [Parameter]
+    public DateTime DateTimeUTC { get; set; }
+
+    [Parameter]
+    public string Channel { get; set; }
+}

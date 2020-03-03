@@ -13,6 +13,9 @@ namespace BlazorOBS.Services
         public TwitchChatEventType Type { get; set; }
         public string Message { get; set; }
         public string Username { get; set; }
+        public string Channel { get; set; }
+        public string Command { get; set; }
+        public int Viewers { get; set; }
         public DateTime DTGUtc { get; set; }
     }
 }
