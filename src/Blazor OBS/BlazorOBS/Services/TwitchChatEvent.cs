@@ -10,6 +10,11 @@ namespace BlazorOBS.Services
             Message = msg;
             DTGUtc = DateTime.UtcNow;
         }
+        public TwitchChatEvent(TwitchChatEventType type)
+        {
+            Type = type;
+            DTGUtc = DateTime.UtcNow;
+        }
         public TwitchChatEventType Type { get; set; }
         public string Message { get; set; }
         public string Username { get; set; }

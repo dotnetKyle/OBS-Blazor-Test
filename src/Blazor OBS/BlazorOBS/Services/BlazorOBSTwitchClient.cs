@@ -100,25 +100,24 @@ namespace BlazorOBS.Services
 
         private void Client_OnUserLeft(object sender, OnUserLeftArgs e)
         {
-            var channel = e.Channel;
-            var username = e.Username;
-            
-            OnChatEvent?.Invoke(new TwitchChatEvent(TwitchChatEventType.UserLeft, $"{username} has left the chat."));
+            var chatEvent = new TwitchChatEvent(TwitchChatEventType.UserLeft);
+            chatEvent.Username = e.Username;
+            chatEvent.Channel = e.Channel;
+
+            OnChatEvent?.Invoke(chatEvent);
         }
 
         private void Client_OnUserJoined(object sender, OnUserJoinedArgs e)
         {
-            var channel = e.Channel;
-            var username = e.Username;
+            var chatEvent = new TwitchChatEvent(TwitchChatEventType.UserJoined);
+            chatEvent.Username = e.Username;
+            chatEvent.Channel = e.Channel;
 
-            OnChatEvent?.Invoke(new TwitchChatEvent(TwitchChatEventType.UserJoined, $"{username} has joined the chat."));
+            OnChatEvent?.Invoke(chatEvent);
         }
 
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
-            var userId = e.ChatMessage.UserId;
-            var type = e.ChatMessage.UserType;
-
             var chatEvent = new TwitchChatEvent(TwitchChatEventType.MessageRecieved, e.ChatMessage.Message);
             chatEvent.Username = e.ChatMessage.Username;
 

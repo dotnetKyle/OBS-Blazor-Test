@@ -22,6 +22,7 @@
 
     .chat-icon {
         grid-column: 2 / 3;
+        padding-right:2px;
     }
 
     .chat-user {
@@ -35,6 +36,7 @@
 
     .chat-actions {
         grid-column: 5 / 6;
+        border-bottom:1px solid rgba(0,0,0,0.5);
     }
 
     .chat-full-line {
@@ -104,7 +106,7 @@
                     <RaidStarted DateTimeUTC="@chat.DTGUtc" Channel="@chat.Channel" />
                     break;
                 case TwitchChatEventType.MessageRecieved:
-                    <ChatMessage DateTimeUTC="@chat.DTGUtc"  Message="@chat.Message" />
+                    <ChatMessage DateTimeUTC="@chat.DTGUtc" Username="@chat.Username" Message="@chat.Message" />
                     break;
                 case TwitchChatEventType.CommandRecieved:
                     <ChatCommandReceived DateTimeUTC="@chat.DTGUtc" Command="@chat.Command" Username="@chat.Username" />                    

@@ -1,8 +1,9 @@
 ﻿@using Humanizer
 
 @* Date/Time *@
-<div class="chat-dtg text-nowrap">@DateTimeUTC.Humanize()</div>
-
+    <div class="chat-dtg text-nowrap">
+        <HumanizedDateTime DateTime="@DateTimeUTC" />
+    </div>
 @* Icon *@
 <div class="chat-icon">
     <i class="fas fa-angle-left"></i>

@@ -1,11 +1,13 @@
 ﻿@using Humanizer
-    
+
 @* Date Time Column *@
-<div class="chat-dtg text-nowrap">@DateTimeUTC.Humanize()</div>
+<div class="chat-dtg text-nowrap">
+    <HumanizedDateTime DateTime="@DateTimeUTC" />
+</div>
 
 @* Username Column *@
 <div class="chat-user text-nowrap">
-    @if(string.IsNullOrWhiteSpace(Username) == false)
+    @if (string.IsNullOrWhiteSpace(Username) == false)
     {
         <span class="badge badge-primary">
             @Username

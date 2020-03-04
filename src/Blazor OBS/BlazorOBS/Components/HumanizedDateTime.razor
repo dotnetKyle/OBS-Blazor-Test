@@ -1,0 +1,41 @@
+﻿@using Humanizer
+@using System.Timers;
+
+<span>@humanizedDateTime</span>
+
+@code {
+    private string humanizedDateTime;
+    private Timer ticker;
+
+    [Parameter]
+    public int RefreshRate { get; set; } = 60;
+
+    [Parameter]
+    public DateTime DateTime { get; set; }
+}
+
+@functions { 
+
+    async void tick(object target, ElapsedEventArgs args)
+    {
+        var newHumanizedDTG = DateTime.Humanize();
+
+        if(humanizedDateTime != newHumanizedDTG)
+        {
+            humanizedDateTime = newHumanizedDTG;
+
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        tick(null, null);
+
+        ticker = new Timer(RefreshRate * 1000);
+        ticker.Elapsed += tick;
+        ticker.Start();
+
+        base.OnInitialized();
+    }
+}

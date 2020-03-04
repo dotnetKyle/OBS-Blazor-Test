@@ -1,7 +1,9 @@
 ﻿@using Humanizer
-    
+
 @* Date Time Column *@
-<div class="chat-dtg text-nowrap">@DateTimeUTC.Humanize()</div>
+<div class="chat-dtg text-nowrap">
+    <HumanizedDateTime DateTime="@DateTimeUTC" />
+</div>
 
 @* Username Column *@
 <div class="chat-icon text-nowrap">
