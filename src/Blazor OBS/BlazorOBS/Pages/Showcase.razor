@@ -1,7 +1,9 @@
 ﻿@using BlazorOBS.Extensions
 @using BlazorOBS.Shared
+@using Microsoft.Extensions.Configuration
 
 @inject UserState userState
+@inject IConfiguration config
 
 @page "/showcase"
 
@@ -11,7 +13,7 @@
     <div class="extension-metadata">
         <div class="extension-url">
             <label>Component URL:</label>
-            <code>https://localhost:44360/chat-highlighter</code>
+            <code>@($"http://localhost:{portNumber}/chat-highlighter")</code>
         </div>
     </div>
     <p>
@@ -28,6 +30,8 @@
 </div>
 
 @code {
+    private string portNumber;
+
     void showChatHightlight()
     {
         userState.ShowHighlightedMessage(null, new HighlightedMessage
@@ -37,5 +41,12 @@
                 + "elit, sed do eiusmod tempor incididunt ut labore et "
                 + "dolore magna aliqua."
         });
+    }
+    
+    protected override void OnInitialized()
+    {
+        portNumber = config.GetValue("port", "8301");
+
+        base.OnInitialized();
     }
 }

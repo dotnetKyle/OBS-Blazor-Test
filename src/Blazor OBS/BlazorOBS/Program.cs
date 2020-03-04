@@ -25,8 +25,12 @@ namespace BlazorOBS
                     // Add an optional hosting.json file so the app can listen on a different port or URL
                     var config = new ConfigurationBuilder()
                         .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appsettings.json")
                         .AddJsonFile("appsettings.Release.json", true)
                         .Build();
+
+                    webBuilder.UseUrls("http://localhost:" + config.GetValue("port", "8301"));
+
                     webBuilder.UseConfiguration(config);
 
                     webBuilder.UseStartup<Startup>();
