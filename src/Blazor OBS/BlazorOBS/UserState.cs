@@ -11,14 +11,15 @@ namespace BlazorOBS
 
         public void ShowHighlightedMessage(object sender, HighlightedMessage highlightedMessage)
         {
-            var list = OnHighlightMessage.GetInvocationList();
-
-            foreach(var func in list)
+            if(OnHighlightMessage != null)
             {
-                func.DynamicInvoke(sender, highlightedMessage);
-            }
+                var list = OnHighlightMessage.GetInvocationList();
 
-            //OnHighlightMessage?.Invoke(sender, highlightedMessage);
+                foreach(var func in list)
+                {
+                    func.DynamicInvoke(sender, highlightedMessage);
+                }
+            }
         }
     }
 

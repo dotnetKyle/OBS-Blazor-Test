@@ -1,4 +1,7 @@
 ﻿@using Humanizer
+@using BlazorOBS.Services
+
+@inject UserState userState
 
 @* Date Time Column *@
 <div class="chat-dtg text-nowrap">
@@ -21,7 +24,11 @@
 </div>
 
 @* Actions Column *@
-<div class="chat-actions"></div>
+<div class="chat-actions">
+    <button type="button" class="btn btn-sm btn-success" title="Highlight Chat Message" @onclick="highlightChatMessage">
+        <i class="fas fa-share-square"></i>
+    </button>
+</div>
 
 @code {
     [Parameter]
@@ -32,4 +39,14 @@
 
     [Parameter]
     public string Username { get; set; }
+
+
+    void highlightChatMessage()
+    {
+        userState.ShowHighlightedMessage(this, new HighlightedMessage
+        {
+            Username = Username,
+            Message = Message
+        });
+    }
 }
