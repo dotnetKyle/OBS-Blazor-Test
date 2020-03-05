@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TwitchLib;
 using TwitchLib.Client;
 using TwitchLib.Client.Models;
 using TwitchLib.Client.Events;
@@ -10,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace BlazorOBS.Services
 {
+
     public class BlazorOBSTwitchClient
     {
         TwitchClient _client;

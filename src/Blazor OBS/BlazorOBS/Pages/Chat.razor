@@ -10,7 +10,7 @@
 <style>
     .chat-window {
         display: grid;
-                            /*  Date-Time   Username     icon       Msg     Actions*/
+        /*  Date-Time   Username     icon       Msg     Actions*/
         grid-template-columns: min-content min-content min-content auto min-content;
     }
 
@@ -22,7 +22,7 @@
 
     .chat-icon {
         grid-column: 2 / 3;
-        padding-right:2px;
+        padding-right: 2px;
     }
 
     .chat-user {
@@ -36,7 +36,7 @@
 
     .chat-actions {
         grid-column: 5 / 6;
-        border-bottom:1px solid rgba(0,0,0,0.5);
+        border-bottom: 1px solid rgba(0,0,0,0.5);
     }
 
     .chat-full-line {
@@ -65,6 +65,10 @@
         .msg.userleft {
             color: gray;
         }
+
+    .publish-notification {
+        color: dodgerblue;
+    }
 
     .icon.log {
         color: darkgray;
@@ -109,7 +113,10 @@
                     <ChatMessage DateTimeUTC="@chat.DTGUtc" Username="@chat.Username" Message="@chat.Message" />
                     break;
                 case TwitchChatEventType.CommandRecieved:
-                    <ChatCommandReceived DateTimeUTC="@chat.DTGUtc" Command="@chat.Command" Username="@chat.Username" />                    
+                    <ChatCommandReceived DateTimeUTC="@chat.DTGUtc" Command="@chat.Command" Username="@chat.Username" />
+                    break;
+                case TwitchChatEventType.PublishNotification:
+
                     break;
                 default:
                     <ChatMessage DateTimeUTC="@chat.DTGUtc" Message="@chat.Message" />
@@ -126,6 +133,7 @@
     private List<TwitchChatEvent> incomingChatEvents = new List<TwitchChatEvent>();
 
     private BlazorOBSTwitchClient client;
+    private BlazorOBSTwitchPubSubClient pubSubClient;
 
     int timerTicksInSeconds = 2;
     int dateRefresh = 0;
@@ -135,14 +143,25 @@
         var userSettings = BlazorOBSUserSettings.Get();
 
         client = BlazorOBSTwitchClient.Create(userSettings);
-
         client.OnChatEvent = OnChatEvent;
+
+        pubSubClient = BlazorOBSTwitchPubSubClient.Create(userSettings);
+        pubSubClient.OnPublishEvent = publishEvent;
 
         chatUpdateTimer = new Timer(timerTicksInSeconds * 1000);
         chatUpdateTimer.Elapsed += chatUpdateTick;
         chatUpdateTimer.Start();
 
         base.OnInitialized();
+    }
+
+    async void publishEvent(TwitchPublishEvent pubEvent)
+    {
+        // put new event at the TOP of the chat
+        incomingChatEvents.Insert(0, new TwitchChatEvent(TwitchChatEventType.PublishNotification,
+            $"{pubEvent.DisplayName} has followed!"));
+
+        await InvokeAsync(StateHasChanged);
     }
 
     void highlightChatMessage(TwitchChatEvent chatEvent)

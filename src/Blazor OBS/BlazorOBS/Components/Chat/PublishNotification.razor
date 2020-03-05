@@ -1,0 +1,26 @@
+﻿@using Humanizer
+
+@* Date Time Column *@
+<div class="chat-dtg text-nowrap">
+    <HumanizedDateTime DateTime="@DateTimeUTC" />
+</div>
+
+<div class="chat-icon">
+    <i class="fas fa-bell"></i>
+</div>
+
+@* Message Column *@
+<div class="chat-full-line publish-notification">
+    <span>@Message</span>
+</div>
+
+@* Actions Column *@
+<div class="chat-actions"></div>
+
+@code {
+    [Parameter]
+    public DateTime DateTimeUTC { get; set; }
+
+    [Parameter]
+    public string Message { get; set; }
+}

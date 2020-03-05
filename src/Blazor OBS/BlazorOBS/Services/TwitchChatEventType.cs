@@ -10,5 +10,6 @@
         RaidStarted,
         MessageRecieved,
         CommandRecieved,
+        PublishNotification
     }
 }

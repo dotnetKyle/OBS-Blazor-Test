@@ -28,15 +28,16 @@
             "openid", // required
             "channel_feed_read",
             "chat:read",
-            //"bits:read", // 
-            //"channel:read:subscriptions", // 
-            //"user:read:broadcast", // 
+            "bits:read",
+            "channel:read:redemptions",
+            "channel:moderate",
+            "whispers:read",
+            "channel_subscriptions",           
 
+            //"user:read:broadcast", // 
             //// Chat and PubSub
             //"channel:moderate", // Perform moderation actions in a channel. The user requesting the scope must be a moderator in the channel.
-            // "chat:read", // View live stream chat and rooms messages.
             //"chat:edit", // Send live stream chat and rooms messages.
-            //"whispers:read", // View your whisper messages.
             //"whispers:edit", // Send whisper messages.
         };
 
