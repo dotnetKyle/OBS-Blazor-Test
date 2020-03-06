@@ -7,7 +7,8 @@ namespace BlazorOBS.Services
 {
     public enum PublishEventType
     {
-        NewFollow
+        NewFollow,
+        MessageDeleted
     }
     public class TwitchPublishEvent
     {
@@ -21,6 +22,7 @@ namespace BlazorOBS.Services
         public string FollowedChannelId { get; set; }
         public string DisplayName { get; set; }
         public string Username { get; set; }
+        public string Message { get; set; }
         public string UserId { get; set; }
     }
 }

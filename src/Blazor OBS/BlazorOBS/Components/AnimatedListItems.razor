@@ -1,0 +1,116 @@
+﻿@using BlazorOBS.Shared
+@using System.Timers;
+
+@page "/animated-list"
+<style>
+    .animated-list-extension {
+        text-align: right;
+    }
+
+    .animated-list {
+        list-style-type: none;
+        margin-right: 5px;
+    }
+
+        .animated-list > li {
+            margin: 5px;
+        }
+
+    .extension-pill {
+        display: inline-block;
+        background-color: purple;
+        border: 1px solid white;
+        border-radius: 5px;
+        color: white;
+        padding: 2px;
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+</style>
+
+<BlazorObsExtension>
+    @if(tickerActivated)
+    {
+        <div class="animated-list-extension @(Exiting ? "animated bounceOutRight" : "")">
+            <h2 class="extension-pill animated bounceInRight">@Title</h2>
+            <ul class="animated-list">
+                @for (int i = 0; i < Items.Count; i++)
+                {
+                    <li class="animated bounceInRight" style="@("animation-delay: " + (((double)i * animationSpacing) + animationSpacing) + "s")">
+                        <span class="extension-pill">@Items[i]</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</BlazorObsExtension>
+
+
+
+@code {
+    [CascadingParameter(Name = "IsExtension")]
+    public Action IsExtension { get; set; }
+
+    private Timer animateTicker { get; set; }
+    private Timer exitAnimationTimer { get; set; }
+    private double animationSpacing = .2;
+
+    [Parameter]
+    public List<string> Items { get; set; } = new List<string>
+{
+        "VS 2019 Community",
+        "Blazor",
+        "ASP.Net Core",
+        "C#",
+        "HTML",
+        "CSS",
+        "TwitchLib",
+        "Animate.css"
+    };
+
+    public string Title { get; set; } = "Working with:";
+
+    bool Exiting = false;
+    bool tickerActivated = false;
+    async void exitAnimationTick(object target, ElapsedEventArgs args)
+    {
+        tickerActivated = false;
+        Exiting = false;
+        await InvokeAsync(StateHasChanged);
+    }
+    async void tick(object target, ElapsedEventArgs args)
+    {
+        if(tickerActivated == false)
+        {
+            tickerActivated = true;
+            animateTicker.Interval = 20 * 1000; // 20 seconds
+            animateTicker.Start();
+        }
+        else
+        {
+            Exiting = true;
+            exitAnimationTimer = new Timer(5 * 1000);
+            exitAnimationTimer.AutoReset = false;
+            exitAnimationTimer.Elapsed += exitAnimationTick;
+            exitAnimationTimer.Start();
+
+            animateTicker.Interval = 3 * 60 * 1000; // 3 mins
+            animateTicker.Start();
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected override void OnInitialized()
+    {
+        animateTicker = new Timer(5 * 1000);
+        animateTicker.Elapsed += tick;
+        animateTicker.AutoReset = false;
+        animateTicker.Start();
+
+        IsExtension?.Invoke();
+
+        base.OnInitialized();
+    }
+
+}

@@ -157,9 +157,21 @@
 
     async void publishEvent(TwitchPublishEvent pubEvent)
     {
-        // put new event at the TOP of the chat
-        incomingChatEvents.Insert(0, new TwitchChatEvent(TwitchChatEventType.PublishNotification,
-            $"{pubEvent.DisplayName} has followed!"));
+        if(pubEvent.Type == PublishEventType.NewFollow)
+        {
+            incomingChatEvents.Insert(0, new TwitchChatEvent(TwitchChatEventType.PublishNotification,
+                $"{pubEvent.DisplayName} has followed!"));
+        }
+        else if(pubEvent.Type == PublishEventType.MessageDeleted)
+        {
+            incomingChatEvents.Insert(0, new TwitchChatEvent(TwitchChatEventType.PublishNotification,
+                $"A message was deleted, \"{pubEvent.Message}\""));
+        }
+        else
+        {
+            incomingChatEvents.Insert(0, new TwitchChatEvent(TwitchChatEventType.PublishNotification,
+                $"An event ({pubEvent.Type.ToString()}) has occurred."));
+        }
 
         await InvokeAsync(StateHasChanged);
     }

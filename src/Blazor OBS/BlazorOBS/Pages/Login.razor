@@ -20,7 +20,7 @@
         //TODO: check if we already have a token stored, if so, validate that token instead
 
         var settings = BlazorOBSTwitchSettings.Get();
-        var redirectUri = config.GetValue<string>("loginRedirectUri", "https://localhost:44360/complete-login");
+        var redirectUri = config.GetValue<string>("loginRedirectUri", "https://localhost:8301/complete-login");
 
         var scopes = new string[]
         {
@@ -31,6 +31,7 @@
             "bits:read",
             "channel:read:redemptions",
             "channel:moderate",
+            "user_subscriptions",
             "whispers:read",
             "channel_subscriptions",           
 
